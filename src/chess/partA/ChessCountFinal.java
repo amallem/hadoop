@@ -1,3 +1,5 @@
+package chess.partA;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  * Created by anirudh on 12/9/15.
@@ -26,8 +29,15 @@ public class ChessCountFinal {
 
         public void map(Object key, Text value, Context context)
                 throws IOException, InterruptedException{
-            word.set(key.toString());
-            result = new DoubleWritable(Double.parseDouble(value.toString()));
+            System.out.println("----------> "+value.toString());
+            StringTokenizer itr = new StringTokenizer(value.toString());
+            String[] str = new String[2];
+            str[0] = itr.nextToken();
+            System.out.println("----------> " + str[0]);
+            str[1] = itr.nextToken();
+            System.out.println("----------> " + str[1]);
+            word.set(str[0]);
+            result = new DoubleWritable(Double.parseDouble(str[1]));
             context.write(word,result);
         }
     }
@@ -74,6 +84,8 @@ public class ChessCountFinal {
         job.setJarByClass(ChessCountFinal.class);
         job.setMapperClass(SecondMapper.class);
         job.setReducerClass(SecondReducer.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(DoubleWritable.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
         job.setNumReduceTasks(1);

@@ -1,3 +1,4 @@
+package chess;
 
 import chesspresso.game.Game;
 import chesspresso.pgn.PGNReader;

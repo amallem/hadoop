@@ -1,3 +1,4 @@
+package chess;
 
 /**
  * Created by anirudh on 12/8/15.

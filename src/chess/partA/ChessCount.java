@@ -1,15 +1,16 @@
+package chess.partA;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
+import chess.PGNGame;
+import chess.PGNInputFormat;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -66,11 +67,30 @@ public class ChessCount {
         }
     }
 
+    public static class MyPartitioner
+            extends Partitioner<Text, DoubleWritable>{
+
+        @Override
+        public int getPartition(Text text, DoubleWritable doubleWritable, int numPartitions) {
+            switch(text.toString()){
+                case "White" :
+                    return 0;
+                case "Black" :
+                    return 1;
+                case "Draw" :
+                    return 2;
+                case "A" :
+                    return 3;
+                default:
+                    return 0;
+            }
+        }
+    }
+
     public static class IntSumReducer
             extends Reducer<Text,DoubleWritable,Text,Text> {
 
-        private DoubleWritable result = new DoubleWritable();
-        private HashMap<Text,Double> resultList = new HashMap<>();
+        private Text result = new Text();
         public void reduce(Text key, Iterable<DoubleWritable> values,
                            Context context
         ) throws IOException, InterruptedException {
@@ -78,27 +98,8 @@ public class ChessCount {
             for (DoubleWritable val : values) {
                 sum += val.get();
             }
-            System.out.println("Values put to resultList......" + key.toString() + " with value = " + sum);
-            resultList.put(new Text(key.toString()), sum);
-            System.out.println("ResultList....." + resultList);
-        }
-
-        @Override
-        public void cleanup(Context context) throws IOException, InterruptedException{
-            Text total = new Text("A");
-            System.out.println("Inside CleanUp....." + resultList);
-            double totalGames = resultList.get(total);
-            resultList.remove(total);
-            Iterator it = resultList.entrySet().iterator();
-            double percent;
-            Map.Entry pair;
-            while(it.hasNext()){
-                pair = (Map.Entry)it.next();
-                percent = (double)pair.getValue() / totalGames ;
-                result.set(percent);
-                Text finalVal = new Text(new Double((double)pair.getValue()).toString() + " " + result.toString());
-                context.write((Text) pair.getKey(), finalVal);
-            }
+            result.set(new Double(sum).toString());
+            context.write(key,result);
         }
     }
 
@@ -108,8 +109,11 @@ public class ChessCount {
         job.setJarByClass(ChessCount.class);
         job.setMapperClass(TokenizerMapper.class);
         job.setCombinerClass(ChessCombiner.class);
+        job.setPartitionerClass(MyPartitioner.class);
         job.setReducerClass(IntSumReducer.class);
         job.setOutputKeyClass(Text.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(DoubleWritable.class);
         job.setOutputValueClass(Text.class);
         job.setInputFormatClass(PGNInputFormat.class);
         job.setNumReduceTasks(4);
