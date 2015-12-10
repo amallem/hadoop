@@ -5,17 +5,15 @@ package chess;
  */
 public class PGNGame {
 
-
-
     private String whitePlayer;
     private String blackPlayer;
     private int plyCount;
     private int result;
 
-    public PGNGame(String white, String black, int plyCOunt, int result){
+    public PGNGame(String white, String black, int plyCount, int result) {
         whitePlayer = white;
         blackPlayer = black;
-        this.plyCount = plyCOunt;
+        this.plyCount = plyCount;
         this.result = result;
     }
 
@@ -23,7 +21,7 @@ public class PGNGame {
         return this.whitePlayer;
     }
 
-    public String getBlacklayer(){
+    public String getBlackPlayer() {
         return this.blackPlayer;
     }
 
