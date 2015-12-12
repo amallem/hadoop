@@ -58,11 +58,11 @@ public class PlayerCount {
                 resultWhite.set(game.getWhitePlayer() + " " + WHITE + " " + LOSS);
                 context.write(resultWhite, zero);
 
-                resultWhite.set(game.getBlackPlayer() + " " + BLACK + " " + DRAW);
+                resultBlack.set(game.getBlackPlayer() + " " + BLACK + " " + DRAW);
                 context.write(resultBlack, one);
-                resultWhite.set(game.getBlackPlayer() + " " + BLACK + " " + WON);
+                resultBlack.set(game.getBlackPlayer() + " " + BLACK + " " + WON);
                 context.write(resultBlack, zero);
-                resultWhite.set(game.getBlackPlayer() + " " + BLACK + " " + LOSS);
+                resultBlack.set(game.getBlackPlayer() + " " + BLACK + " " + LOSS);
                 context.write(resultBlack, zero);
             }
             totalBlack.set(game.getBlackPlayer() + " " + BLACK);

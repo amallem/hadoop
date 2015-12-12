@@ -31,29 +31,39 @@ public class PlayerCountFinal {
             String[] player = {itr.nextToken(), itr.nextToken()};
             switch (lineCounter) {
                 case 0:
+                    System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
                     currentPlayer.setPlayerName(player[0]);
                     currentPlayer.setPlayerColour(player[1]);
                     currentPlayer.setTotalGames(Double.parseDouble(itr.nextToken()));
+                    lineCounter++;
                     break;
                 case 1:
                 case 2:
-                case 3:
+                    System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
                     currentPlayer.setGameStats(itr.nextToken(), itr.nextToken());
+                    lineCounter++;
                     break;
-                default:
+                case 3:
+                    System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
+                    currentPlayer.setGameStats(itr.nextToken(), itr.nextToken());
                     currentPlayer.setPercentages();
                     writePlayerToContext(context);
                     currentPlayer.reset();
+                    lineCounter = 0;
+                    break;
+                default:
+                    System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
                     break;
             }
         }
 
         private void writePlayerToContext(Context context) throws IOException, InterruptedException {
+            System.out.println("****************Writing to Context***************************");
             Text key = new Text(currentPlayer.getPlayerName() + "\t"
                     + currentPlayer.getPlayerColour());
-            Text value = new Text(currentPlayer.getGamesWon() + "\t"
-                    + currentPlayer.getGamesLost() + "\t"
-                    + currentPlayer.getGamesDraw());
+            Text value = new Text(Double.toString(currentPlayer.getGamesWon()) + "\t"
+                    + Double.toString(currentPlayer.getGamesLost()) + "\t"
+                    + Double.toString(currentPlayer.getGamesDraw()));
             context.write(key, value);
         }
     }
@@ -65,7 +75,7 @@ public class PlayerCountFinal {
         job.setMapperClass(PlayerStatsMapper.class);
         job.setReducerClass(Reducer.class);
         job.setInputFormatClass(NLineInputFormat.class);
-        job.getConfiguration().setInt("mapreduce.input.lineinputformat.linespermap", 100);
+        job.getConfiguration().setInt("mapreduce.input.lineinputformat.linespermap", 10000);
 
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
