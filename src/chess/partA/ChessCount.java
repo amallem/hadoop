@@ -31,7 +31,6 @@ public class ChessCount {
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
             PGNGame game = (PGNGame) key;
-            System.out.println("Result......."+game.getResult());
             switch (game.getResult()){
                 case WHITE_WON:
                     word.set("White");
@@ -117,6 +116,9 @@ public class ChessCount {
         job.setOutputValueClass(Text.class);
         job.setInputFormatClass(PGNInputFormat.class);
         job.setNumReduceTasks(4);
+
+        job.getConfiguration().addResource(new Path(args[0]));
+
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
         System.exit(job.waitForCompletion(true) ? 0 : 1);

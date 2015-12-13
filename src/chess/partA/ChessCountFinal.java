@@ -29,13 +29,10 @@ public class ChessCountFinal {
 
         public void map(Object key, Text value, Context context)
                 throws IOException, InterruptedException{
-            System.out.println("----------> "+value.toString());
             StringTokenizer itr = new StringTokenizer(value.toString());
             String[] str = new String[2];
             str[0] = itr.nextToken();
-            System.out.println("----------> " + str[0]);
             str[1] = itr.nextToken();
-            System.out.println("----------> " + str[1]);
             word.set(str[0]);
             result = new DoubleWritable(Double.parseDouble(str[1]));
             context.write(word,result);
@@ -54,15 +51,12 @@ public class ChessCountFinal {
             for (DoubleWritable val : values) {
                 sum += val.get();
             }
-            System.out.println("Values put to resultListFinal......" + key.toString() + " with value = " + sum);
             resultList.put(new Text(key.toString()), sum);
-            System.out.println("ResultList....." + resultList);
         }
 
         @Override
         public void cleanup(Context context) throws IOException, InterruptedException{
             Text total = new Text("A");
-            System.out.println("Inside CleanUp....." + resultList);
             double totalGames = resultList.get(total);
             resultList.remove(total);
             Iterator it = resultList.entrySet().iterator();
@@ -70,9 +64,9 @@ public class ChessCountFinal {
             Map.Entry pair;
             while(it.hasNext()){
                 pair = (Map.Entry)it.next();
-                percent = (double)pair.getValue() / totalGames ;
+                percent = (double) pair.getValue() / totalGames;
                 result.set(percent);
-                Text finalVal = new Text(new Double((double)pair.getValue()).toString() + " " + result.toString());
+                Text finalVal = new Text(new Double((double) pair.getValue()).toString() + "   " + result.toString());
                 context.write((Text) pair.getKey(), finalVal);
             }
         }

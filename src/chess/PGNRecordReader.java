@@ -33,7 +33,7 @@ public class PGNRecordReader extends RecordReader<PGNGame, Text> {
         FileSplit split = (FileSplit) inputSplit;
         file = split.getPath();
         jobConfig = taskAttemptContext.getConfiguration();
-        gameFileInputStream = FileSystem.get(jobConfig).open(file);
+        gameFileInputStream = FileSystem.get(file.toUri(), jobConfig).open(file);
         reader = new PGNReader(gameFileInputStream,null);
 
     }
@@ -53,7 +53,6 @@ public class PGNRecordReader extends RecordReader<PGNGame, Text> {
             }
         }catch(Exception e){
             e.printStackTrace();
-            throw new IOException(e);
         } finally{
             if(gameFileInputStream == null){
                 gameFileInputStream.close();
