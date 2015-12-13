@@ -71,7 +71,7 @@ public class PlayerCountFinal {
     public static void main(String args[]) throws Exception {
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "Player Stats");
-        job.setJarByClass(PlayerCount.class);
+        job.setJarByClass(PlayerCountFinal.class);
         job.setMapperClass(PlayerStatsMapper.class);
         job.setReducerClass(Reducer.class);
         job.setInputFormatClass(NLineInputFormat.class);
