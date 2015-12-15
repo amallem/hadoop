@@ -31,7 +31,7 @@ public class PlayerCountFinal {
             String[] player = {itr.nextToken(), itr.nextToken()};
             switch (lineCounter) {
                 case 0:
-                    System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
+                    //      System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
                     currentPlayer.setPlayerName(player[0]);
                     currentPlayer.setPlayerColour(player[1]);
                     currentPlayer.setTotalGames(Double.parseDouble(itr.nextToken()));
@@ -39,12 +39,12 @@ public class PlayerCountFinal {
                     break;
                 case 1:
                 case 2:
-                    System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
+                    //        System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
                     currentPlayer.setGameStats(itr.nextToken(), itr.nextToken());
                     lineCounter++;
                     break;
                 case 3:
-                    System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
+                    //          System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
                     currentPlayer.setGameStats(itr.nextToken(), itr.nextToken());
                     currentPlayer.setPercentages();
                     writePlayerToContext(context);
@@ -52,13 +52,13 @@ public class PlayerCountFinal {
                     lineCounter = 0;
                     break;
                 default:
-                    System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
+                    //            System.out.println("--------> " + player[0] + " " + player[1] + " <--------------" + lineCounter);
                     break;
             }
         }
 
         private void writePlayerToContext(Context context) throws IOException, InterruptedException {
-            System.out.println("****************Writing to Context***************************");
+            //   System.out.println("****************Writing to Context***************************");
             Text key = new Text(currentPlayer.getPlayerName() + "\t"
                     + currentPlayer.getPlayerColour());
             Text value = new Text(Double.toString(currentPlayer.getGamesWon()) + "\t"

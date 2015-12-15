@@ -31,9 +31,9 @@ public class GameCountFinal {
             StringTokenizer itr = new StringTokenizer(value.toString());
             String freq = itr.nextToken();
             String percent = itr.nextToken();
-            resultKey.set(new Double(percent));
+            resultKey.set(Double.parseDouble(percent) * 100.0);
             resultValue.set(freq);
-            System.out.println("----------->" + freq + " ----- " + percent + "<----------- ");
+//            System.out.println("----------->" + freq + " ----- " + percent + "<----------- ");
             context.write(resultKey, resultValue);
         }
     }
@@ -54,6 +54,7 @@ public class GameCountFinal {
         job.setJarByClass(GameCountFinal.class);
         job.setMapperClass(GameCountFinalMapper.class);
         job.setReducerClass(GameCountFinalReducer.class);
+        job.setNumReduceTasks(1);
 
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputKeyClass(Text.class);

@@ -90,7 +90,7 @@ public class GameCount {
             for (DoubleWritable val : values) {
                 sum += val.get();
             }
-            System.out.println(key.toString() + " -------> " + Double.toString(sum));
+            //       System.out.println(key.toString() + " -------> " + Double.toString(sum));
             if (isFirst) {
                 totalGames = sum;
                 isFirst = false;
